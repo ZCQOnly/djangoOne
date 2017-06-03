@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
                 ('utel', models.CharField(default=b'', max_length=15)),
                 ('upost', models.CharField(default=b'', max_length=11)),
                 ('uaddress', models.CharField(default=b'', max_length=40)),
+                ('ushou', models.CharField(default=b'', max_length=40)),
             ],
         ),
     ]

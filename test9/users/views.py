@@ -7,9 +7,8 @@ import deractor
 # Create your views here.
 
 
-def index(request):
-    context = {'login_btn': ['login_btn', '', '', '']}
-    return render(request, 'users/index.html',context)
+# def index(request):
+#     return render(request, 'users/index.html')
 
 
 def register(request):
@@ -100,6 +99,7 @@ def info(request):
              'umail': umail,
              'uaddress': uaddress,
              'utel': utel,
+             'page_name':1,
              'active': ['active', '', '']
              }
     return render(request, 'users/user_center_info.html', context)
@@ -107,7 +107,7 @@ def info(request):
 
 @deractor.login
 def order(request):
-    context = {'title': '用户中心', 'active': ['', 'active', '']}
+    context = {'title': '用户中心', 'active': ['', 'active', ''], 'page_name':1}
     return render(request, 'users/user_center_order.html', context)
 
 
@@ -121,7 +121,7 @@ def site(request):
         user.utel = post.get('utel')
         user.ushou = post.get('ushou')
         user.save()
-    context = {'title': '用户中心','user': user, 'active': ['', '', 'active']}
+    context = {'title': '用户中心','user': user, 'active': ['', '', 'active'], 'page_name':1}
     return render(request, 'users/user_center_site.html', context)
 
 
