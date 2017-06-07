@@ -1,14 +1,11 @@
 # coding:utf-8
 from django.shortcuts import render,redirect
 from models import userInfo
+from df_goods.models import GoodsInfo
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from hashlib import sha1
 import deractor
 # Create your views here.
-
-
-# def index(request):
-#     return render(request, 'users/index.html')
 
 
 def register(request):
@@ -64,9 +61,10 @@ def login_handle(request):
         print s1.hexdigest()
         print users[0].passwd
         if s1.hexdigest() == users[0].passwd:
-            url = request.COOKIES.get('url', '/users')
+            url = request.COOKIES.get('red_url', '/')
             # print url
-            red = HttpResponseRedirect(url)
+            # red = HttpResponseRedirect(url)
+            red = redirect(url)
             red.set_cookie('url', '', max_age=-1)
             print
             if jizhu != 0:
@@ -86,7 +84,7 @@ def login_handle(request):
 
 def logout(request):
     request.session.flush()
-    return redirect('/users/')
+    return redirect('/')
 
 
 @deractor.login
@@ -94,13 +92,21 @@ def info(request):
     umail = userInfo.objects.get(id=request.session['user_id']).umail
     uaddress = userInfo.objects.get(id=request.session['user_id']).uaddress
     utel = userInfo.objects.get(id=request.session['user_id']).utel
+
+    goods_list = []
+    goods_ids = request.COOKIES.get('browse', '')
+    if goods_ids != '':
+        id_list = goods_ids.split(',')
+        for ids in id_list:
+            goods_list.append(GoodsInfo.objects.get(id=int(ids)))
     context={'title': '用户中心',
              'username': request.session['user_name'],
              'umail': umail,
              'uaddress': uaddress,
              'utel': utel,
              'page_name':1,
-             'active': ['active', '', '']
+             'active': ['active', '', ''],
+             'goods_list':goods_list,
              }
     return render(request, 'users/user_center_info.html', context)
 

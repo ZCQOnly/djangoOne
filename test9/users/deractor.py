@@ -13,7 +13,10 @@ def login(fun):
              return fun(request, *args, **kwargs)
 
          else:
-             red = HttpResponseRedirect('/users/login/')
-             red.set_cookie('url', request.get_full_path())
-             return red
+             if request.is_ajax():
+                 return JsonResponse({'islogin':0})
+             else:
+                 return HttpResponseRedirect('/users/login/')
+             # red.set_cookie('url', request.get_full_path())
+             # return red
     return login_fun
