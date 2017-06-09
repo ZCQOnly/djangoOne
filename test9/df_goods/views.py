@@ -1,6 +1,8 @@
 # coding:utf-8
 from django.shortcuts import render
-from models import *
+from models import GoodsInfo, TypeInfo
+from df_cart.models import CartInfo
+from users.deractor import *
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -14,7 +16,7 @@ def index(request):
             'hot_click': type.goodsinfo_set.order_by('-gclick')[0:3],
             'hot_new': type.goodsinfo_set.order_by('-id')[0:4]
         })
-    context = {'title': '首页', 'list': list}
+    context = {'title': '首页', 'list': list,'cart_count': cart_count(request)}
     return render(request, 'df_goods/index.html', context)
 
 
@@ -41,11 +43,12 @@ def list(request, tid, pindex, sort):
     context = {'title': '商品列表', 'gtype': gtype,
                'tid': tid, 'page': page, 'sort': sort,
                'newslist': newslist, 'active': active,
-                'pindex': pindex,}
+                'pindex': pindex,'cart_count': cart_count(request)}
     return render(request, 'df_goods/list.html', context)
 
 
 def detail(request, id):
+    # 在加入购物车的时候，需要判断一下，当前库存是否还有货物
     goods = GoodsInfo.objects.get(pk=int(id))
     goods.gclick = goods.gclick+1
     goods.save()
@@ -54,6 +57,7 @@ def detail(request, id):
                'newslist': goods_new,
                'id': id,
                'goods': goods,
+               'cart_count': cart_count(request),
                }
     response = render(request, 'df_goods/detail.html', context)
 
@@ -81,11 +85,14 @@ class MySearchView(SearchView):
     def extra_context(self):
         extra = super(MySearchView, self).extra_context()
         extra['title']=self.request.GET.get('q')
+        extra['cart_count']=cart_count(self.request)
+
         return extra
 
-# 由于首页＼列表页都需要显示购物车里面商品的数量，所以建立函数来实现数量的显示
+# 由于首页列表页都需要显示购物车里面商品的数量，所以建立函数来实现数量的显示
+# @login
 def cart_count(request):
-    if request.session.has_key('user_id'):
-        return CartInfo.objects.filter(request.session['user_id']).count()
+    if request.session. has_key('user_id'):
+        return CartInfo.objects.filter(user_id=request.session['user_id']).count()
     else:
         return 0

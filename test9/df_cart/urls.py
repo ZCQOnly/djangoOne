@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^add(\d+)_(\d+)/$', views.add),
     url(r'amount(\d+)_(\d+)/$', views.amount),
     url(r'delete(\d+)/$',views.delete),
+    url(r'^order/$',views.order),
 ]

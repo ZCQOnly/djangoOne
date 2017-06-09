@@ -80,24 +80,31 @@
 
 		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'})
 		$('#add_cart').click(function(){
-		    //判断是否登录，若未登录则提示先登录
-			if($('.login_btn').text().indexOf('登录')>=0){
-			    alert('请先登录后再购买');
-			    location.href='/users/login/';
-				return;
-			}
-			//动画
-			$(".add_jump").stop().animate({
-				'left': $to_y+7,
-				'top': $to_x+7},
-				"fast", function() {
-					$(".add_jump").fadeOut('fast',function(){});
-					});
+
 			//异步
 			$.get('/cart/add{{goods.id}}_'+parseInt($('.num_show').val())+'/',
 						function (data) {
-							$('#show_count').html(data.count);
+			    //判断是否登录，若未登录则提示先登录
+			if(data.islongin == 0){
+
+//                alert('请先登录后再购买');
+			    location.href='/users/login/';
+				return;
+
+			}
+			else{  $('#show_count').html(data.count);}
+
 			});
+
+			//动画
+			$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'}).stop().animate({
+				'left': $to_y+7,
+				'top': $to_x+7},
+				"fast", function() {
+					$(".add_jump").fadeOut('fast',function(){
+					    $(".add_jump").fadeOut('fast');
+                    });
+					});
 
 		});
 

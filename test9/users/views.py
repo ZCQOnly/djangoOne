@@ -2,9 +2,11 @@
 from django.shortcuts import render,redirect
 from models import userInfo
 from df_goods.models import GoodsInfo
+from df_order.models import OrderInfo,OrderDetailInfo
 from django.http import HttpResponse,JsonResponse,HttpResponseRedirect
 from hashlib import sha1
 import deractor
+from django.core.paginator import Paginator
 # Create your views here.
 
 
@@ -112,8 +114,22 @@ def info(request):
 
 
 @deractor.login
-def order(request):
-    context = {'title': '用户中心', 'active': ['', 'active', ''], 'page_name':1}
+def order(request,pindex):
+    # 获得当前登陆用户的所有订单列表，并按照订单编号进行降序排序
+    order_list = OrderInfo.objects.filter(user_id=request.session['user_id']).order_by('-oid')
+
+    # 创建paginator对象，一页显示多少条数据
+    paginator=Paginator(order_list,2)
+    if pindex=='':
+        pindex=1
+    #  创建ｐａｇｅ对象，获得这一页所有的数据
+    page=paginator.page(int(pindex))
+    context = {'title': '用户中心',
+               'active': ['', 'active', ''],
+               'page_name':1,
+               'page':page,
+               'pindex':pindex,
+               "paginator":paginator}
     return render(request, 'users/user_center_order.html', context)
 
 
@@ -122,7 +138,7 @@ def site(request):
     user = userInfo.objects.get(id=request.session['user_id'])
     if request.method == 'POST':
         post = request.POST
-        user.uddress = post.get('uaddress')
+        user.uaddress = post.get('uaddress')
         user.upost = post.get('upost')
         user.utel = post.get('utel')
         user.ushou = post.get('ushou')

@@ -46,7 +46,7 @@
 	{%for item in list%}
 	<div class="list_model">
 		<div class="list_title clearfix">
-			<h3 class="fl" id="model01">{{item.type.ttitle}}</h3>
+			<h3 class="fl" id="model0{{forloop.counter}}">{{item.type.ttitle}}</h3>
 			<div class="subtitle fl">
 				<span>|</span>
 				{%for click in item.hot_click%}
@@ -61,8 +61,8 @@
 			<ul class="goods_list fl">
 				{%for hot in item.hot_new%}
 				<li>
-					<h4><a href="/{{hot.id}}/">{{hot.gtitle}}</a></h4>
-					<a href="/{{hot.id}}/"><img src="/static/{{hot.gpic}}"></a>
+					<h4><a href="/detail{{hot.id}}/">{{hot.gtitle}}</a></h4>
+					<a href="/detail{{hot.id}}/"><img src="/static/{{hot.gpic}}"></a>
 					<div class="prize">¥ {{hot.gprice}}</div>
 				</li>
 				{%endfor%}
@@ -73,20 +73,20 @@
 
   <script type="text/javascript" src="/static/js/slideshow.js"></script>
 	<script type="text/javascript">
-		BCSlideshow('focuspic');
-		var oFruit = document.getElementById('fruit_more');
-		var oShownum = document.getElementById('show_count');
-
-		var hasorder = localStorage.getItem('order_finish');
-
-		if(hasorder)
-		{
-			oShownum.innerHTML = '2';
-		}
-
-		oFruit.onclick = function(){
-			window.location.href = 'list.html';
-		}
+//		BCSlideshow('focuspic');
+//		var oFruit = document.getElementById('fruit_more');
+//		var oShownum = document.getElementById('show_count');
+//
+//		var hasorder = localStorage.getItem('order_finish');
+//
+//		if(hasorder)
+//		{
+//			oShownum.innerHTML = '2';
+//		}
+//
+//		oFruit.onclick = function(){
+//			window.location.href = 'list.html';
+//		}
 	</script>
 
 {%endblock content%}

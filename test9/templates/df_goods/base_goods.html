@@ -40,8 +40,8 @@
             <ul>
                 {% for news in newslist %}
                 <li>
-                    <a href="/{{news.id}}/"><img src="/static/{{news.gpic}}"></a>
-                    <h4><a href="/{{news.id}}/">{{news.gtitle}}</a></h4>
+                    <a href="/detail{{news.id}}/"><img src="/static/{{news.gpic}}"></a>
+                    <h4><a href="/detail{{news.id}}/">{{news.gtitle}}</a></h4>
                     <div class="prize">￥{{news.gprice}}</div>
                 </li>
                 {% endfor %}
